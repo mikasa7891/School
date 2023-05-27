@@ -1,12 +1,12 @@
 package com.kirylkhrystsenka.schoolapp.models.entities;
 
 import com.kirylkhrystsenka.schoolapp.models.HasId;
-import org.springframework.stereotype.Component;
 
 public class Course implements HasId<Long> {
     private Long id;
     private String name;
     private String description;
+
     public Course() {
 
     }
