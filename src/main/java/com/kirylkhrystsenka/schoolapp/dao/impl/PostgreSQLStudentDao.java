@@ -2,9 +2,7 @@ package com.kirylkhrystsenka.schoolapp.dao.impl;
 
 import com.kirylkhrystsenka.schoolapp.dao.AbstractCrudDao;
 import com.kirylkhrystsenka.schoolapp.dao.StudentDao;
-import com.kirylkhrystsenka.schoolapp.dao.rowmapper.GroupRowMapper;
 import com.kirylkhrystsenka.schoolapp.dao.rowmapper.StudentRowMapper;
-import com.kirylkhrystsenka.schoolapp.models.entities.Group;
 import com.kirylkhrystsenka.schoolapp.models.entities.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,12 +15,12 @@ import java.util.Optional;
 
 @Component
 public class PostgreSQLStudentDao extends AbstractCrudDao<Student, Long> implements StudentDao {
-    public static final String FIND_BY_NAME = "select * from students where first_name = ?";
-    public static final String CREATE = "INSERT INTO students VALUES(?,?,?)";
-    public static final String UPDATE = "UPDATE students SET group_id = ?, fist_name = ?, last_name = ? WHERE student_id = ?";
-    public static final String FIND_BY_ID = "select * from students where student_id = ?";
-    public static final String FIND_ALL = "select * from students";
-    public static final String DELETE_BY_ID = "DELETE FROM students WHERE student_id = ?";
+    private static final String FIND_BY_NAME = "select * from students where first_name = ?";
+    private static final String CREATE = "INSERT INTO students (group_id, first_name, last_name) VALUES(?,?,?) RETURNING *";
+    private static final String UPDATE = "UPDATE students SET group_id = ?, first_name = ?, last_name = ? WHERE student_id = ?";
+    private static final String FIND_BY_ID = "select * from students where student_id = ?";
+    private static final String FIND_ALL = "select * from students";
+    private static final String DELETE_BY_ID = "DELETE FROM students WHERE student_id = ?";
     private final JdbcTemplate jdbcTemplate;
     private final RowMapper<Student> rowMapper = new StudentRowMapper();
 
@@ -32,16 +30,12 @@ public class PostgreSQLStudentDao extends AbstractCrudDao<Student, Long> impleme
     }
 
     @Override
-    protected Student create(Student entity) {
-        jdbcTemplate.update(CREATE, entity.getGroupId(), entity.getFirstName(), entity.getLastName());
-        Long generatedId = jdbcTemplate.queryForObject("SELECT LASTVAL()", Long.class);
-        entity.setId(generatedId);
-
-        return entity;
+    public Student create(Student entity) {
+        return jdbcTemplate.queryForObject(CREATE, rowMapper, entity.getGroupId(), entity.getFirstName(), entity.getLastName());
     }
 
     @Override
-    protected Student update(Student entity) {
+    public Student update(Student entity) {
         jdbcTemplate.update(UPDATE, entity.getGroupId(), entity.getFirstName(), entity.getLastName(), entity.getId());
         return entity;
     }
@@ -69,6 +63,7 @@ public class PostgreSQLStudentDao extends AbstractCrudDao<Student, Long> impleme
 
     @Override
     public void deleteById(Long id) {
+        jdbcTemplate.update("DELETE FROM student_courses where student_id = ?", id);
         jdbcTemplate.update(DELETE_BY_ID, id);
     }
 

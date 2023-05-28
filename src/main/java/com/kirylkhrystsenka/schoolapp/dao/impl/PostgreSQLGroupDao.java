@@ -6,23 +6,31 @@ import com.kirylkhrystsenka.schoolapp.dao.rowmapper.CourseRowMapper;
 import com.kirylkhrystsenka.schoolapp.dao.rowmapper.GroupRowMapper;
 import com.kirylkhrystsenka.schoolapp.models.entities.Course;
 import com.kirylkhrystsenka.schoolapp.models.entities.Group;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
 public class PostgreSQLGroupDao extends AbstractCrudDao<Group, Long> implements GroupDao {
-    public static final String FIND_BY_NAME = "select * from groups where group_name = ?";
-    public static final String CREATE = "INSERT INTO groups VALUES(?)";
-    public static final String UPDATE = "UPDATE groups SET group_name = ? WHERE group_id = ?";
-    public static final String FIND_BY_ID = "select * from groups where group_id = ?";
-    public static final String FIND_ALL = "select * from groups";
-    public static final String DELETE_BY_ID = "DELETE FROM groups WHERE group_id = ?";
+    private static final String FIND_BY_NAME = "SELECT * FROM groups WHERE group_name = ?";
+    private static final String CREATE = "INSERT INTO groups (group_name) VALUES (?)";
+    private static final String UPDATE = "UPDATE groups SET group_name = ? WHERE group_id = ?";
+    public static final String FIND_BY_ID = "SELECT * FROM groups WHERE group_id = ?";
+    private static final String FIND_ALL = "SELECT * FROM groups";
+    private static final String DELETE_BY_ID = "DELETE FROM groups WHERE group_id = ?";
+    private static final String DELETE_STUDENTS = "DELETE FROM students WHERE group_id = ?";
+    private static final String DELETE_STUDENTS_FROM_COURSES = "DELETE FROM student_courses WHERE student_id IN" +
+                                                               "(SELECT student_id FROM students WHERE group_id = ?)";
     private final JdbcTemplate jdbcTemplate;
     private final RowMapper<Group> rowMapper = new GroupRowMapper();
 
@@ -32,12 +40,16 @@ public class PostgreSQLGroupDao extends AbstractCrudDao<Group, Long> implements 
     }
 
     @Override
-    protected Group create(Group entity) {
-        jdbcTemplate.update(CREATE, rowMapper, entity.getName());
+    public Group create(Group entity) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(CREATE, new String[]{"group_id"});
+            ps.setString(1, entity.getName());
+            return ps;
+        }, keyHolder);
 
-        Long generatedId = jdbcTemplate.queryForObject("SELECT LASTVAL()", Long.class);
+        Long generatedId = Objects.requireNonNull(keyHolder.getKey()).longValue();
         entity.setId(generatedId);
-
         return entity;
     }
 
@@ -70,6 +82,10 @@ public class PostgreSQLGroupDao extends AbstractCrudDao<Group, Long> implements 
 
     @Override
     public void deleteById(Long id) {
+        jdbcTemplate.update(DELETE_STUDENTS_FROM_COURSES, id);
+
+        jdbcTemplate.update(DELETE_STUDENTS, id);
+
         jdbcTemplate.update(DELETE_BY_ID, id);
     }
 

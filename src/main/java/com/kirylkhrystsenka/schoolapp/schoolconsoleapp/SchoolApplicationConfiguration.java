@@ -1,5 +1,6 @@
 package com.kirylkhrystsenka.schoolapp.schoolconsoleapp;
 
+import com.kirylkhrystsenka.schoolapp.dao.impl.PostgreSQLGroupDao;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
