@@ -115,7 +115,7 @@ public class PostgreSQLCourseDaoTest {
 
         @Test
         void findByName_ExistingName_ReturnsCourse() {
-            String name = "Math";
+            String name = "Mathematics";
 
             Optional<Course> result = courseDao.findByName(name);
 

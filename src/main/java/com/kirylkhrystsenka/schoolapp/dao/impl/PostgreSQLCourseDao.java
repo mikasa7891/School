@@ -4,8 +4,7 @@ import com.kirylkhrystsenka.schoolapp.dao.AbstractCrudDao;
 import com.kirylkhrystsenka.schoolapp.dao.CourseDao;
 import com.kirylkhrystsenka.schoolapp.dao.rowmapper.CourseRowMapper;
 import com.kirylkhrystsenka.schoolapp.models.entities.Course;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:postgresql:14.6:///postgres?currentSchema=public&TC_REUSABLE=true
+    url: jdbc:tc:postgresql:14.6:///postgres?currentSchema=public&TC_DAEMON=true
     username: postgres
     password: T3n$hi7892
     hikari:

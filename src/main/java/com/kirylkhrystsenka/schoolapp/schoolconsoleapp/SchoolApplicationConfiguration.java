@@ -1,10 +1,8 @@
 package com.kirylkhrystsenka.schoolapp.schoolconsoleapp;
 
-import com.kirylkhrystsenka.schoolapp.dao.impl.PostgreSQLGroupDao;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,8 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 @Configuration
-@PropertySource("classpath:application.properties")
-@ComponentScan("com.kirylkhrystsenka.schoolapp")
+@PropertySource("classpath:application.yml")
 public class SchoolApplicationConfiguration {
     @Value("${spring.datasource.url}")
     String dbUrl;

@@ -27,7 +27,7 @@ class PostgreSQLGroupDaoTest {
     PostgreSQLGroupDao dao;
 
     @Test
-    void findById_ExistingId_ReturnsStudent() {
+    void findById_ExistingId_ReturnsGroup() {
 
         Long id = 1L;
 
@@ -48,7 +48,7 @@ class PostgreSQLGroupDaoTest {
     }
 
     @Test
-    void findAll_ReturnsListOfStudents() {
+    void findAll_ReturnsListGroups() {
 
         List<Group> result = dao.findAll();
 
@@ -56,7 +56,7 @@ class PostgreSQLGroupDaoTest {
     }
 
     @Test
-    void save_NewStudent_ReturnsSavedStudentWithGeneratedId() {
+    void save_NewStudent_ReturnsSavedGroupWithGeneratedId() {
 
         Group group = new Group();
         group.setName("Group");
@@ -67,7 +67,7 @@ class PostgreSQLGroupDaoTest {
     }
 
     @Test
-    void save_ExistingStudent_ReturnsUpdatedStudent() {
+    void save_ExistingStudent_ReturnsUpdatedGroup() {
         Group group = new Group();
         group.setName("Group_A");
 
@@ -78,7 +78,7 @@ class PostgreSQLGroupDaoTest {
     }
 
     @Test
-    void deleteById_ExistingId_DeletesStudent() {
+    void deleteById_ExistingId_DeletesGroup() {
         Long id = 1L;
 
         dao.deleteById(id);
@@ -88,9 +88,9 @@ class PostgreSQLGroupDaoTest {
     }
 
     @Test
-    void findByName_ExistingName_ReturnsStudent() {
+    void findByName_ExistingName_ReturnsGroup() {
 
-        String name = "Group B";
+        String name = "Group A";
 
         Optional<Group> result = dao.findByName(name);
 

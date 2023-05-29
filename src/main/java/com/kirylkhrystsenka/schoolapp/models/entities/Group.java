@@ -1,8 +1,7 @@
 package com.kirylkhrystsenka.schoolapp.models.entities;
 
 import com.kirylkhrystsenka.schoolapp.models.HasId;
-import lombok.Builder;
-import lombok.Data;
+
 
 
 public class Group implements HasId<Long> {

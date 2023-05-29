@@ -8,8 +8,6 @@ public class SchoolConsoleApp {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SchoolConsoleApp.class, args);
-
-		System.out.println("Привет, мир!");
 	}
 
 }
