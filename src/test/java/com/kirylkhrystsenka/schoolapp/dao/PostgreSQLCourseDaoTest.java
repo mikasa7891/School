@@ -1,7 +1,6 @@
 package com.kirylkhrystsenka.schoolapp.dao;
 
 import com.kirylkhrystsenka.schoolapp.dao.impl.PostgreSQLCourseDao;
-import com.kirylkhrystsenka.schoolapp.dao.impl.PostgreSQLGroupDao;
 import com.kirylkhrystsenka.schoolapp.models.entities.Course;
 import com.kirylkhrystsenka.schoolapp.schoolconsoleapp.SchoolApplicationConfiguration;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
         scripts = {"/sql/clear_tables.sql", "/sql/sample_data.sql"},
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 )
-public class PostgreSQLCourseDaoTest {
+class PostgreSQLCourseDaoTest {
         @Autowired
         private PostgreSQLCourseDao courseDao;
 
